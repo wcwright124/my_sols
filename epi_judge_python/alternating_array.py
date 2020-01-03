@@ -5,9 +5,15 @@ from test_framework.test_failure import PropertyName, TestFailure
 from test_framework.test_utils import enable_executor_hook
 
 
-def rearrange(A):
+def rearrange(A): # O(n) time | O(1) space
     # TODO - you fill in here.
-    return
+    for i in range(len(A) - 1):
+        temp = sorted([A[i], A[i+1]])
+        if i % 2 == 0:
+            A[i:i+2] = temp
+        else:
+            A[i:i+2] = reversed(temp)
+    return A
 
 
 @enable_executor_hook
