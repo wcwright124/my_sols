@@ -1,6 +1,7 @@
 import copy
 import functools
 import math
+import random
 
 from test_framework import generic_test
 from test_framework.random_sequence_checker import (
@@ -10,7 +11,11 @@ from test_framework.test_utils import enable_executor_hook
 
 def compute_random_permutation(n):
     # TODO - you fill in here.
-    return []
+    res = list(range(n))
+    for i in range(n):
+        j = random.randint(i, n-1)
+        res[i], res[j] = res[j], res[i]
+    return res
 
 
 @enable_executor_hook
