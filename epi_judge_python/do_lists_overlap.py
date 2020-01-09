@@ -6,7 +6,50 @@ from test_framework.test_utils import enable_executor_hook
 
 
 def overlapping_lists(l0, l1):
-    # TODO - you fill in here.
+    def length(head):
+        length = 0
+        while head:
+            length += 1
+            head = head.next
+        return length
+
+    def get_cycle_length(head):
+        slow, fast = head, head
+        while fast and fast.next:
+            slow, fast = slow.next, fast.next.next
+            if slow is fast:
+                fast = fast.next
+                length = 1
+                while fast is not slow:
+                    fast = fast.next
+                    length += 1
+                return length, slow
+        return -1, None
+    
+    l0_cycle_len, node0 = get_cycle_length(l0)
+    l1_cycle_len, node1 = get_cycle_length(l1)
+    if l0_cycle_len > 0 and l1_cycle_len > 0: # both have cycles
+        if l0_cycle_len != l1_cycle_len:
+            return None
+        for _ in range(l0_cycle_len):
+            if node0 is node1:
+                return node0
+            node0 = node0.next
+        return None
+    elif l0_cycle_len > 0 or l1_cycle_len > 0: # can't intersect
+        return None
+    else: # neither contains a cycle
+        # follow logic from problem 7.4
+        n0, n1 = length(l0), length(l1)
+        if n0 < n1:
+            for _ in range(n1-n0):
+                l1 = l1.next
+        else:
+            for _ in range(n0 - n1):
+                l0 = l0.next
+        while l0 is not l1:
+            l0, l1 = l0.next, l1.next
+        return l0
     return None
 
 

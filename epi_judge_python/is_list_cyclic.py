@@ -4,9 +4,42 @@ from test_framework import generic_test
 from test_framework.test_failure import TestFailure
 from test_framework.test_utils import enable_executor_hook
 
+def has_cycle2(head):
+    fast = slow = head
+    while fast and fast.next and fast.next.next:
+        slow, fast = slow.next, fast.next.next
+        if slow is fast:
+            slow = head
+            while slow is not fast:
+                slow, fast = slow.next, fast.next
+            return slow
+    return None
 
 def has_cycle(head):
+    def get_cycle_length(node):
+        curr = node.next
+        cycle_length = 1
+        while curr is not node:
+            curr = curr.next
+            cycle_length += 1
+        return cycle_length
+    
+    def find_start(head, cycle_length):
+        lead, lag = head, head
+        for _ in range(cycle_length):
+            lead = lead.next
+        while lead is not lag:
+            lead, lag = lead.next, lag.next
+        return lag
+    
     # TODO - you fill in here.
+    slow, fast = head, head
+    while fast and fast.next:
+        fast = fast.next.next
+        slow = slow.next
+        if fast is slow:
+            cycle_length = get_cycle_length(slow)
+            return find_start(head, cycle_length)
     return None
 
 

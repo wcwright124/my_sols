@@ -2,6 +2,39 @@ import functools
 from test_framework import generic_test
 
 
+def knuth_morris_pratt(string, substring):
+    def buildPattern():
+        pattern = [-1 for _ in substring]
+        i, j = 0, 1
+        while j < len(substring):
+            if substring[j] == substring[i]:
+                pattern[j] = i
+                i += 1
+                j += 1
+            elif i > 0:
+                i = pattern[i-1] + 1
+            else:
+                j += 1
+        return pattern
+    if len(substring) > len(string):
+	    return -1
+    if len(substring) == 0:
+        return 0
+    patternTable = buildPattern()
+    string_idx = 0
+    substring_idx = 0
+    while string_idx < len(string):
+        if substring[substring_idx] == string[string_idx]:
+            substring_idx += 1
+            string_idx += 1
+        elif substring_idx > 0:
+            substring_idx = patternTable[substring_idx-1] + 1
+        else:
+            string_idx += 1
+        if substring_idx == len(substring):
+            return string_idx-len(substring)
+    return -1
+
 def rabin_karp(text, search):
     # TODO - you fill in here.
     if len(search) > len(text):
@@ -27,4 +60,4 @@ def rabin_karp(text, search):
 if __name__ == '__main__':
     exit(
         generic_test.generic_test_main("substring_match.py",
-                                       'substring_match.tsv', rabin_karp))
+                                       'substring_match.tsv', knuth_morris_pratt))
