@@ -3,20 +3,35 @@ from test_framework.test_failure import TestFailure
 
 
 class Stack:
+    def __init__(self):
+        self.__stack = []
+        self.__max_stack = []
+    
     def empty(self):
         # TODO - you fill in here.
-        return True
+        return len(self.__stack) == 0
 
     def max(self):
         # TODO - you fill in here.
-        return 0
+        return self.__max_stack[-1][0]
 
     def pop(self):
         # TODO - you fill in here.
-        return 0
+        max_idx = self.__max_stack[-1][1]
+        pop_idx = len(self.__stack) - 1
+        if pop_idx == max_idx:
+            self.__max_stack.pop()
+        return self.__stack.pop()
 
     def push(self, x):
         # TODO - you fill in here.
+        if self.empty():
+            self.__stack.append(x)
+            self.__max_stack.append((x, 0))
+        else:
+            if x > self.max():
+                self.__max_stack.append((x, len(self.__stack)))
+            self.__stack.append(x)
         return
 
 

@@ -3,21 +3,38 @@ from test_framework.test_failure import TestFailure
 
 
 class Queue:
+    RESCALE_FACTOR = 2
+
     def __init__(self, capacity):
         # TODO - you fill in here.
+        self.__queue = [None] * capacity
+        self.__size = 0
+        self.__head = 0
+        self.__tail = 0
         return
 
     def enqueue(self, x):
         # TODO - you fill in here.
+        if self.__size == len(self.__queue): # resize condition
+            self.__queue = self.__queue[self.__head:] + self.__queue[:self.__head] # shift over
+            self.__head, self.__tail = 0, self.__size
+            temp = [None] * ((Queue.RESCALE_FACTOR - 1) * self.__size)
+            self.__queue += temp
+        self.__queue[self.__tail] = x
+        self.__tail = (self.__tail + 1) % len(self.__queue)
+        self.__size += 1
         return
 
     def dequeue(self):
         # TODO - you fill in here.
-        return 0
+        res = self.__queue[self.__head]
+        self.__head = (self.__head + 1) % len(self.__queue)
+        self.__size -= 1
+        return res
 
     def size(self):
         # TODO - you fill in here.
-        return 0
+        return self.__size
 
 
 def queue_tester(ops):
