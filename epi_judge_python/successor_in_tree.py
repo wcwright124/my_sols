@@ -7,6 +7,15 @@ from test_framework.test_utils import enable_executor_hook
 
 def find_successor(node):
     # TODO - you fill in here.
+    if node.right:
+        node = node.right
+        while node.left:
+            node = node.left
+        return node
+    elif node.parent:
+        while node.parent and (node.parent.right is node):
+            node = node.parent
+        return node.parent
     return None
 
 

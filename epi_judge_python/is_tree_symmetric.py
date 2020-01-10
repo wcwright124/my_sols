@@ -3,7 +3,14 @@ from test_framework import generic_test
 
 def is_symmetric(tree):
     # TODO - you fill in here.
-    return True
+    def helper(root1, root2):
+        if (not root1) and (not root2):
+            return True
+        elif root1 and root2:
+            return root1.data == root2.data and helper(root1.left, root2.right) and helper(root1.right, root2.left)
+        else:
+            return False
+    return (not tree) or helper(tree.left, tree.right)
 
 
 if __name__ == '__main__':

@@ -13,9 +13,30 @@ class BinaryTreeNode:
         self.size = size
 
 
-def find_kth_node_binary_tree(tree, k):
+def find_kth_node_binary_tree(tree, k): # O(d) time | O(1) space
+    while tree:
+        left_size = tree.left.size if tree.left else 0
+        if left_size + 1 == k:
+            return tree
+        elif k <= left_size:
+            tree = tree.left
+        else:
+            k -= (left_size + 1)
+            tree = tree.right
+    return 
+
+def find_kth_node_binary_tree2(tree, k): # O(n) time | O(n) space
     # TODO - you fill in here.
-    return None
+    def helper(node):
+        if len(res) == k:
+            return
+        if node:
+            helper(node.left)
+            res.append(node)
+            helper(node.right)
+    res = []
+    helper(tree)
+    return res[k-1]
 
 
 @enable_executor_hook
