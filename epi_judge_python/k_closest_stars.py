@@ -1,4 +1,5 @@
 import functools
+import heapq
 import math
 
 from test_framework import generic_test
@@ -28,8 +29,14 @@ class Star:
 
 def find_closest_k_stars(stars, k):
     # TODO - you fill in here.
-    return []
-
+    k_closest = []
+    for s in stars:
+        if len(k_closest) < k:
+            heapq.heappush(k_closest, (-s.distance, s))
+        else:
+            if s.distance < -k_closest[0][0]:
+                heapq.heappushpop(k_closest, (-s.distance, s))
+    return [heapq.heappop(k_closest)[1] for _ in range(k)]
 
 def comp(expected_output, output):
     if len(output) != len(expected_output):
