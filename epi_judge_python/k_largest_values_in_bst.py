@@ -1,10 +1,20 @@
+import heapq
+
 from test_framework import generic_test, test_utils
 
 
 def find_k_largest_in_bst(tree, k):
+    def helper(node):
+        if node and len(res) < k:
+            helper(node.right)
+            if len(res) < k:
+                res.append(node.data)
+                helper(node.left)
+        return
     # TODO - you fill in here.
-    return None
-
+    res = []
+    helper(tree)
+    return res
 
 if __name__ == '__main__':
     exit(

@@ -16,7 +16,11 @@ class Team:
     @staticmethod
     def valid_placement_exists(team0, team1):
         # TODO - you fill in here.
-        return True
+        if len(team0._players) != len(team1._players):
+            return False
+        heights0 = sorted(team0._players)
+        heights1 = sorted(team1._players)
+        return all(a < b for a,b in zip(heights0, heights1))
 
 
 @enable_executor_hook

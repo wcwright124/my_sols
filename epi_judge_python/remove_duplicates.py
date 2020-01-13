@@ -16,6 +16,15 @@ class Name:
 
 def eliminate_duplicate(A):
     # TODO - you fill in here.
+    A.sort()
+    write_idx = 0
+    scan_idx = 0
+    while scan_idx < len(A):
+        A[write_idx] = A[scan_idx]
+        while scan_idx < len(A) and A[scan_idx].first_name == A[write_idx].first_name:
+            scan_idx += 1
+        write_idx += 1
+    del A[write_idx:]
     return
 
 

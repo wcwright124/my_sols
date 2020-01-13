@@ -1,9 +1,18 @@
 from test_framework import generic_test
 
 
-def matrix_search(A, x):
+def matrix_search(A, x): # O(n + m) time | O (1) space
     # TODO - you fill in here.
-    return True
+    n, m = len(A), len(A[0])
+    i, j = 0, m - 1
+    while 0 <= i < n and 0 <= j < m:
+        if A[i][j] == x:
+            return True
+        elif A[i][j] < x:
+            i += 1
+        else:
+            j -= 1
+    return False
 
 
 if __name__ == '__main__':

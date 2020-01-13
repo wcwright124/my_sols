@@ -1,3 +1,4 @@
+import functools
 import collections
 
 from test_framework import generic_test
@@ -9,7 +10,20 @@ DuplicateAndMissing = collections.namedtuple('DuplicateAndMissing',
 
 def find_duplicate_missing(A):
     # TODO - you fill in here.
-    return DuplicateAndMissing(0, 0)
+    miss_xor_dup = functools.reduce(lambda v, i: v ^ i[0] ^ i[1], enumerate(A), 0)
+    lsb, miss_or_dup = miss_xor_dup & (~(miss_xor_dup - 1)), 0
+    for i, a in enumerate(A):
+        if i & lsb:
+            miss_or_dup ^= i
+        if a & lsb:
+            miss_or_dup ^= a
+    if miss_or_dup in A:
+        duplicate = miss_or_dup
+        missing = duplicate ^ miss_xor_dup
+    else:
+        missing = miss_or_dup
+        duplicate = miss_xor_dup ^ missing
+    return DuplicateAndMissing(duplicate, missing)
 
 
 def res_printer(prop, value):

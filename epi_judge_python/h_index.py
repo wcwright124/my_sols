@@ -1,8 +1,11 @@
 from test_framework import generic_test
 
 
-def h_index(citations):
-    # TODO - you fill in here.
+def h_index(citations): # O(n log n) time | O(n) space
+    citations.sort() # O(n log n) time | O(n) space
+    for i, c in enumerate(citations): # O(n) time
+        if c >= len(citations) - i:
+            return len(citations) - i
     return 0
 
 

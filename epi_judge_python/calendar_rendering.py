@@ -10,7 +10,22 @@ Event = collections.namedtuple('Event', ('start', 'finish'))
 
 def find_max_simultaneous_events(A):
     # TODO - you fill in here.
-    return 0
+    start_times = [a.start for a in A]
+    start_times.sort()
+    end_times = [a.finish for a in A]
+    end_times.sort()
+    start_idx, end_idx = 0, 0
+    max_sim = 0
+    curr_sim = 0
+    while start_idx < len(A):
+        if start_times[start_idx] <= end_times[end_idx]:
+            curr_sim += 1
+            start_idx += 1
+        else:
+            curr_sim -= 1
+            end_idx += 1
+        max_sim = max(max_sim, curr_sim)
+    return max(max_sim, curr_sim)
 
 
 @enable_executor_hook

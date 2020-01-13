@@ -7,9 +7,35 @@ from test_framework.test_utils import enable_executor_hook
 
 Person = collections.namedtuple('Person', ('age', 'name'))
 
-
 def group_by_age(people):
+    age_to_count = collections.Counter((p.age for p in people))
+    age_to_offset, offset = {}, 0
+    for age, count in age_to_count.items():
+        age_to_offset[age] = offset
+        offset += count
+
+    while age_to_offset:
+        from_age = next(iter(age_to_offset))
+        from_idx = age_to_offset[from_age]
+        to_age = people[from_idx].age
+        to_idx = age_to_offset[people[from_idx].age]
+        people[from_idx], people[to_idx] = people[to_idx], people[from_idx]
+        age_to_count[to_age] -= 1
+        if age_to_count[to_age]:
+            age_to_offset[to_age] = to_idx + 1
+        else:
+            del age_to_offset[to_age]
+
+def group_by_age2(people):
     # TODO - you fill in here.
+    age_groups = collections.defaultdict(list)
+    for p in people:
+        age_groups[p.age].append(p)
+    res = []
+    for group in age_groups.values():
+        res += group
+    for i in range(len(people)):
+        people[i] = res[i]
     return
 
 
