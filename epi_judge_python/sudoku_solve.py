@@ -7,9 +7,42 @@ from test_framework.test_failure import TestFailure
 from test_framework.test_utils import enable_executor_hook
 
 
+
 def solve_sudoku(partial_assignment):
+    def remove_invalid_choices(choices, x, y):
+        for v in partial_assignment[x]:
+            choices.discard(v)
+        for i in range(len(partial_assignment[y])):
+            choices.discard(partial_assignment[i][y])
+        a, b = region_size * (x // region_size), region_size * (y // region_size)
+        for i in range(region_size):
+            for j in range(region_size):
+                choices.discard(partial_assignment[a + i][b + j])
+        return 
+    
+    def solve_helper(i, j):
+        if i == len(partial_assignment):
+            i = 0
+            j += 1
+            if j == len(partial_assignment[i]):
+                return True
+        
+        if partial_assignment[i][j] != empty:
+            return solve_helper(i + 1, j)
+        
+        choices = set([x for x in range(1, 10)])
+        remove_invalid_choices(choices, i, j)
+        
+        for c in choices:
+            partial_assignment[i][j] = c
+            if solve_helper(i+1, j):
+                return True
+        partial_assignment[i][j] = empty
+        return False
     # TODO - you fill in here.
-    return True
+    region_size = int(math.sqrt(len(partial_assignment)))
+    empty = 0
+    return solve_helper(0, 0)
 
 
 def assert_unique_seq(seq):

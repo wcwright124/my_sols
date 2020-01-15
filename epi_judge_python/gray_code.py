@@ -4,10 +4,25 @@ from test_framework import generic_test
 from test_framework.test_failure import TestFailure
 from test_framework.test_utils import enable_executor_hook
 
+def gray_code(n): # iterative
+    res = [0]
+    for i in range(1, n + 1):
+        x = 1 << (i - 1)
+        res += [x | r for r in reversed(res)]
+    return res
 
-def gray_code(num_bits):
+def gray_code2(num_bits): # recursive
+    def helper(n):
+        if n == 0:
+            return [0]
+        prev = helper(n - 1)
+        res = prev[:]
+        x = 1 << (n - 1)
+        for p in reversed(prev):
+            res.append(x | p)
+        return res
     # TODO - you fill in here.
-    return []
+    return helper(num_bits)
 
 
 @enable_executor_hook

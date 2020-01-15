@@ -8,8 +8,14 @@ NUM_PEGS = 3
 
 
 def compute_tower_hanoi(num_rings):
-    # TODO - you fill in here.
-    return []
+    def hanoi_helper(n, peg0, peg1, peg2):
+        if n == 1:
+            return [[peg0, peg1]]
+        else:
+            first_moves = hanoi_helper(n-1, peg0, peg2, peg1)
+            last_moves = hanoi_helper(n-1, peg2, peg1, peg0)
+            return first_moves + [[peg0, peg1]] + last_moves
+    return hanoi_helper(num_rings, 0, 1, 2)
 
 
 @enable_executor_hook
