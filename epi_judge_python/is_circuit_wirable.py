@@ -1,3 +1,4 @@
+import collections
 import functools
 
 from test_framework import generic_test
@@ -9,9 +10,30 @@ class GraphVertex:
         self.d = -1
         self.edges = []
 
+# from book, compute distance from starting node
+# if two equidistant nodes share an edge, return False
+# if you finish traversal, you can return True
+# NB: modding by 2 produces the 2-coloring we did here
 
-def is_any_placement_feasible(graph):
+def is_any_placement_feasible(graph): # use bfs to produce a 2-coloring
+    def bfs(node):
+        queue = collections.deque([node])
+        d = 0
+        while queue:
+            for _ in range(len(queue)):
+                curr_node = queue.popleft()
+                curr_node.d = d
+                for n in curr_node.edges:
+                    if n.d == -1:
+                        queue.append(n)
+                    if n.d == d:
+                        return False
+            d = (not d)
+        return True
     # TODO - you fill in here.
+    for node in graph:
+        if node.d == -1 and not bfs(node):
+                return False
     return True
 
 

@@ -5,13 +5,23 @@ from test_framework.test_utils import enable_executor_hook
 
 
 class GraphVertex:
+    WHITE, GRAY, BLACK = range(3)
     def __init__(self):
+        self.is_visited = False
         self.edges = []
 
 
 def is_deadlocked(graph):
+    def dfs(node):
+        if node.is_visited:
+            return True
+        node.is_visited = True
+        return any([dfs(n) for n in node.edges])
     # TODO - you fill in here.
-    return True
+    for node in graph:
+        if not node.is_visited and dfs(node):
+            return True
+    return False
 
 
 @enable_executor_hook
