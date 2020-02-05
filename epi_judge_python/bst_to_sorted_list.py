@@ -7,7 +7,22 @@ from test_framework.test_utils import enable_executor_hook
 
 def bst_to_doubly_linked_list(tree):
     # TODO - you fill in here.
-    return None
+    def helper(node):
+        if not node:
+            return (None, None)
+        left_head, left_tail = helper(node.left)
+        right_head, right_tail = helper(node.right)
+        if left_tail:
+            left_tail.right = node
+        node.left = left_tail
+        if right_head:
+            right_head.left = node
+        node.right = right_head
+        new_head = left_head or node
+        new_tail = right_tail or node
+        return new_head, new_tail
+    head, _ = helper(tree)
+    return head
 
 
 @enable_executor_hook

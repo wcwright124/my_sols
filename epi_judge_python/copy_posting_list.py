@@ -5,10 +5,44 @@ from test_framework import generic_test
 from test_framework.test_failure import TestFailure
 from test_framework.test_utils import enable_executor_hook
 
-
+# EPI Solution
 def copy_postings_list(L):
+    if not L:
+        return None
+
+    it = L
+    while it:
+        new_node = PostingListNode(it.order, it.next, None)
+        it.next = new_node
+        it = new_node.next
+    
+    it = L
+    while it:
+        if it.jump:
+            it.next.jump = it.jump.next
+        it = it.next.next
+
+    it = L
+    new_list_head = it.next
+    while it.next:
+        it.next, it = it.next.next, it.next
+    return new_list_head
+
+# My Solution
+def copy_postings_list1(L):
     # TODO - you fill in here.
-    return None
+    def copy_helper(node):
+        if not node:
+            return None
+        if node not in copy_dict:
+            new_next = copy_helper(node.next)
+            new_node = PostingListNode(node.order, new_next)
+            copy_dict[node] = new_node
+            copy_dict[node].jump = copy_helper(node.jump)
+        return copy_dict[node]
+
+    copy_dict = {}
+    return copy_helper(L)
 
 
 def assert_lists_equal(orig, copy):

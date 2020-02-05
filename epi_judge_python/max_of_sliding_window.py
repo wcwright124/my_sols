@@ -1,3 +1,4 @@
+import collections
 import functools
 
 from test_framework import generic_test
@@ -12,7 +13,18 @@ class TrafficElement:
 
 def calculate_traffic_volumes(A, w):
     # TODO - you fill in here.
-    return []
+    A.sort(key = lambda x: x.time)
+    res = []
+    queue = collections.deque()
+    for a in A:
+        t, vol = a.time, a.volume
+        while queue and t - queue[0].time > w:
+            queue.popleft()
+        while queue and vol >= queue[-1].volume:
+            queue.pop()
+        queue.append(a)
+        res.append(TrafficElement(t, queue[0].volume))
+    return res
 
 
 @enable_executor_hook

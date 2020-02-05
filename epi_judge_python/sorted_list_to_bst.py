@@ -5,13 +5,43 @@ from test_framework import generic_test
 from test_framework.test_failure import TestFailure
 from test_framework.test_utils import enable_executor_hook
 
-
+def find_mid(head):
+    if not head:
+        return None
+    lead, lag = head, head
+    while lead and lead.next:
+        lead, lag = lead.next.next, lag.next
+    return lag
 # Returns the root of the corresponding BST. The prev and next fields of the
 # list nodes are used as the BST nodes left and right fields, respectively.
 # The length of the list is given.
 def build_bst_from_sorted_doubly_list(l, n):
     # TODO - you fill in here.
-    return None
+    def build_bst_helper(start, end):
+        if start >= end:
+            return None
+        mid = (start + end) // 2
+        left = build_bst_helper(start, mid)
+        curr, head[0] = head[0], head[0].next
+        curr.prev = left
+        curr.next = build_bst_helper(mid + 1, end)
+        return curr
+    head = [l]
+    return build_bst_helper(0, n)
+    
+def build_bst_from_sorted_doubly_list1(l, n):
+    def helper(node):
+        if not node:
+            return None
+        root = find_mid(node)
+        left_head = node if node is not root else None
+        root.prev, root.prev.next = None, None
+        right_head = root.next
+        root.prev = root.next = None
+        root.prev = helper(left_head)
+        root.next = helper(right_head)
+        return root
+    return helper(l)
 
 
 def compare_vector_and_tree(tree, it):
